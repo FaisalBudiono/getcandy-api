@@ -1,0 +1,77 @@
+version: "3.8"
+
+services:
+    app:
+        build: ./docker/app
+        image: local/getcandy-php
+        container_name: getcandy_app
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - get-candy
+
+    web:
+        image: nginx:1.19
+        container_name: getcandy_nginx
+        ports:
+            - "80:80"
+        depends_on:
+            - app
+        volumes:
+            - ./public:/var/www/html/public
+            - ./docker/nginx/site.conf:/etc/nginx/conf.d/site.conf
+        networks:
+            - get-candy
+
+    mysql:
+        image: mysql:5.7
+        container_name: getcandy_mysql
+        ports:
+            - "6969:3306"
+        environment:
+            - MYSQL_ROOT_PASSWORD=secretyummyroot
+            - MYSQL_USER=notroot
+            - MYSQL_PASSWORD=secretnotroot
+            - MYSQL_DATABASE=getcandy
+        volumes:
+            - ./docker/mysql/dbdata:/var/lib/mysql
+        networks:
+            - get-candy
+
+    redis:
+        image: redis:6-alpine
+        container_name: getcandy_redis
+        networks:
+            - get-candy
+
+    # es1:
+    #     image: elasticsearch:7.9.0
+    #     container_name: getcandy_es1
+    #     environment:
+    #         - node.name=getcandy_es1
+    #         - cluster.name=es-docker-cluster
+    #         - bootstrap.memory_lock=false
+    #         - discovery.type=single-node
+    #         # - discovery.seed_hosts=getcandy_es2,getcandy_es3
+    #         # - cluster.initial_master_nodes=es01,es02,es03
+    #         - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    #     ulimits:
+    #         memlock:
+    #             soft: -1
+    #             hard: -1
+    #     volumes:
+    #         - data01:/usr/share/elasticsearch/data
+    #     ports:
+    #         - 9200:9200
+    #         - 9300:9300
+    #     networks:
+    #         - get-candy
+
+volumes:
+    data01:
+        driver: local
+
+networks:
+    get-candy:
+        driver: bridge
