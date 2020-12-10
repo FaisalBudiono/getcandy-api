@@ -22,3 +22,6 @@ yarn-error.log
 /.vscode
 /.devcontainer
 *.rest
+
+# Swagger file
+/storage/api-docs/api-docs.json
