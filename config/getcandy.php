@@ -130,8 +130,8 @@ return [
         'batch_size' => 1000,
         'client_config' => [
             'elastic' => [
-                'host' => '0.0.0.0',
-                'port' => null,
+                'host' => 'es1',
+                'port' => 9200,
                 'path' => null,
                 'url' => null,
                 'proxy' => null,

@@ -16,6 +16,8 @@ services:
         container_name: getcandy_nginx
         ports:
             - "80:80"
+            - "443:443"
+            - "8080:6969"
         depends_on:
             - app
         volumes:
@@ -45,28 +47,28 @@ services:
         networks:
             - get-candy
 
-    # es1:
-    #     image: elasticsearch:7.9.0
-    #     container_name: getcandy_es1
-    #     environment:
-    #         - node.name=getcandy_es1
-    #         - cluster.name=es-docker-cluster
-    #         - bootstrap.memory_lock=false
-    #         - discovery.type=single-node
-    #         # - discovery.seed_hosts=getcandy_es2,getcandy_es3
-    #         # - cluster.initial_master_nodes=es01,es02,es03
-    #         - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    #     ulimits:
-    #         memlock:
-    #             soft: -1
-    #             hard: -1
-    #     volumes:
-    #         - data01:/usr/share/elasticsearch/data
-    #     ports:
-    #         - 9200:9200
-    #         - 9300:9300
-    #     networks:
-    #         - get-candy
+    es1:
+        image: elasticsearch:7.9.0
+        container_name: getcandy_es1
+        environment:
+            - node.name=getcandy_es1
+            - cluster.name=es-docker-cluster
+            - bootstrap.memory_lock=false
+            - discovery.type=single-node
+            # - discovery.seed_hosts=getcandy_es2,getcandy_es3
+            # - cluster.initial_master_nodes=es01,es02,es03
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        volumes:
+            - data01:/usr/share/elasticsearch/data
+        ports:
+            - 9200:9200
+            - 9300:9300
+        networks:
+            - get-candy
 
 volumes:
     data01:
