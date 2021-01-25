@@ -17,3 +17,7 @@ Route::prefix('/auth')->group(function () {
     Route::post('/access', 'AuthController@login');
     Route::post('/logout', 'AuthController@logout');
 });
+
+Route::get('/dummy', 'DummyController@index');
+Route::get('/dummy/api', 'DummyController@api');
+Route::get('/dummy/categories', 'DummyController@categories');

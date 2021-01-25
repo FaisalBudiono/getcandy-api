@@ -15,13 +15,11 @@ services:
         image: nginx:1.19
         container_name: getcandy_nginx
         ports:
-            - "80:80"
-            - "443:443"
             - "8080:6969"
         depends_on:
             - app
         volumes:
-            - ./public:/var/www/html/public
+            - .:/var/www/html
             - ./docker/nginx/site.conf:/etc/nginx/conf.d/site.conf
         networks:
             - get-candy
@@ -30,7 +28,7 @@ services:
         image: mysql:5.7
         container_name: getcandy_mysql
         ports:
-            - "6969:3306"
+            - "6970:3306"
         environment:
             - MYSQL_ROOT_PASSWORD=secretyummyroot
             - MYSQL_USER=notroot
@@ -48,14 +46,15 @@ services:
             - get-candy
 
     es1:
-        image: elasticsearch:7.9.0
+        image: elasticsearch:7.10.1
+        # image: elasticsearch:7.9.0
         container_name: getcandy_es1
         environment:
-            - node.name=getcandy_es1
+            - node.name=es1
             - cluster.name=es-docker-cluster
             - bootstrap.memory_lock=false
             - discovery.type=single-node
-            # - discovery.seed_hosts=getcandy_es2,getcandy_es3
+            # - discovery.seed_hosts=es2,es3
             # - cluster.initial_master_nodes=es01,es02,es03
             - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
         ulimits:
